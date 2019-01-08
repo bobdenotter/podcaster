@@ -16,9 +16,10 @@ class FeedController
     public function feed(string $slug, Request $request): Response
     {
         $finder = new Finder();
-        $finder->files()->in(__DIR__ . '/../../public/files/kkc-01')->name('*.mp3');
+        $finder->files()->in(__DIR__ . '/../../public/files/good-omens')->name('*.mp3');
 
         $baseUrl = 'http://' . $request->server->get('HTTP_HOST') . '/files/kkc-01';
+        $title = "Good Omens";
 
 //        dd($request->server->get('HTTP_HOST'));
 
@@ -32,7 +33,7 @@ class FeedController
             $info = $getID3->analyze($file->getRealPath());
 
             $url = $baseUrl . "/" . $file->getRelativePathname();
-            dump($info);
+            dd($info);
 
             $item->setTitle($info['id3v1']['title'] ? $info['id3v1']['title'] : $info['filename']);
             $item->setLink($url);
@@ -57,7 +58,11 @@ class FeedController
 //        dd((string) $feed);
 
 
-        return new Response((string) $feed);
+        $response = new Response((string) $feed);
+
+        $response->headers->set('Content-Type', 'xml');
+
+        return $response;
 
         return new Response("<html><body>foo $slug</body></html>");
 
