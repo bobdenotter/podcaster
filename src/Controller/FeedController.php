@@ -20,7 +20,7 @@ class FeedController
 
         $finder->files()->in(__DIR__ . '/../../public/files/good-omens')->name('*.mp3');
 
-        $baseUrl = 'http://' . $request->server->get('HTTP_HOST') . '/files/good-omens';
+        $baseUrl = 'https://' . $request->server->get('HTTP_HOST') . '/files/good-omens';
         $title = "Good Omens";
         $link = "https://phpnews.io";
 
