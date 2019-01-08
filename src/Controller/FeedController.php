@@ -63,7 +63,7 @@ class FeedController
 
         $response = new Response((string) $feed);
 
-        $response->headers->set('Content-Type', 'xml');
+        $response->headers->set('Content-Type', 'application/rss+xml ');
 
         return $response;
 
