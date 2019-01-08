@@ -20,14 +20,14 @@ class FeedController
 
         $finder->files()->in(__DIR__ . '/../../public/files/good-omens')->name('*.mp3');
 
-        $baseUrl = 'http://' . $request->server->get('HTTP_HOST') . '/files/kkc-01';
+        $baseUrl = 'http://' . $request->server->get('HTTP_HOST') . '/files/good-omens';
         $title = "Good Omens";
-        $link = "phpnews.io";
+        $link = "https://phpnews.io";
 
 //        dd($request->server->get('HTTP_HOST'));
 
         $feed = new \Castanet_Feed($title, $link, 'Een boek');
-        $feed->setImage('cover.jpg', 1440, 960);
+        $feed->setImage($baseUrl . '/cover.jpg', 1440, 960);
 
         foreach ($finder as $file) {
 
