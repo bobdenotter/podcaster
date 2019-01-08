@@ -43,7 +43,7 @@ class FeedController
 
             $url = $baseUrl . "/" . $file->getRelativePathname();
 
-            $item->setTitle($info['id3v1']['title'] ?: $info['filename']);
+            $item->setTitle($info['id3v1']['title'] ? $info['id3v1']['title'] : $info['filename']);
             $item->setLink($url);
             $item->setMediaUrl($url);
             $item->setMediaMimeType('audio/mpeg');
