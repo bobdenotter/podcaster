@@ -16,15 +16,18 @@ class FeedController
     public function feed(string $slug, Request $request): Response
     {
         $finder = new Finder();
+        $getID3 = new getID3;
+
         $finder->files()->in(__DIR__ . '/../../public/files/good-omens')->name('*.mp3');
 
         $baseUrl = 'http://' . $request->server->get('HTTP_HOST') . '/files/kkc-01';
         $title = "Good Omens";
+        $link = "phpnews.io";
 
 //        dd($request->server->get('HTTP_HOST'));
 
-        $feed = new \Castanet_Feed('Title', 'https://nos.nl', 'Een boek');
-        $getID3 = new getID3;
+        $feed = new \Castanet_Feed($title, $link, 'Een boek');
+        $feed->setImage('cover.jpg', 1440, 960);
 
         foreach ($finder as $file) {
 
@@ -33,7 +36,7 @@ class FeedController
             $info = $getID3->analyze($file->getRealPath());
 
             $url = $baseUrl . "/" . $file->getRelativePathname();
-            dd($info);
+//            dd($info);
 
             $item->setTitle($info['id3v1']['title'] ? $info['id3v1']['title'] : $info['filename']);
             $item->setLink($url);
