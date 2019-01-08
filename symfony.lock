@@ -44,6 +44,9 @@
     "monolog/monolog": {
         "version": "1.24.0"
     },
+    "nass600/get-id3": {
+        "version": "1.0.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -217,5 +220,8 @@
     },
     "twig/twig": {
         "version": "v2.6.0"
+    },
+    "wapmorgan/mp3info": {
+        "version": "0.0.3"
     }
 }
