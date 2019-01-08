@@ -14,25 +14,27 @@ class FeedController
      */
     public function feed(string $slug): Response
     {
-
         $finder = new Finder();
+        $finder->files()->in(__DIR__ . '/../../public/files/kkc-01')->name('*.mp3');
 
-        $finder->files()->in(__DIR__ . '/../../public/files/kkc-01');
+        $baseUrl = "https://nu.nl";
 
         $feed = new \Castanet_Feed('Title', 'https://nos.nl', 'Een boek');
+        $getID3 = new getID3;
 
         foreach ($finder as $file) {
 
             $item = new \Castanet_Item();
 
-            $getID3 = new getID3;
+            $info = $getID3->analyze($file->getRealPath());
 
-            $ThisFileInfo = $getID3->analyze($file->getRealPath());
+            $url = $baseUrl . "/" . $file->getRelativePathname();
+//            dump($info);
 
-            dump($ThisFileInfo);
+            $item->setTitle($info['id3v1']['title'] ? $info['id3v1']['title'] : $info['filename']);
+            $item->setLink($url);
+            $item->setMediaUrl($url);
 
-            $item->setTitle($file->getRealPath());
-            $item->setLink($file->getRelativePathname());
 
             $feed->addItem($item);
             // dumps the absolute path
