@@ -18,15 +18,21 @@ class FeedController
         $finder = new Finder();
         $getID3 = new getID3;
 
-        $finder->files()->in(__DIR__ . '/../../public/files/good-omens')->name('*.mp3');
+        $config = [
+            'path' => 'good-omens',
+            'title' => "Good Omens",
+            'link' => "https://phpnews.io",
+            'description' => "This is a short description of the entire works. This is a short description of the entire works. This is a short description of the entire works. ",
+        ];
 
-        $baseUrl = 'https://' . $request->server->get('HTTP_HOST') . '/files/good-omens';
-        $title = "Good Omens";
-        $link = "https://phpnews.io";
+        $baseUrl = 'https://' . $request->server->get('HTTP_HOST') . '/files/' . $config['path'];
 
-//        dd($request->server->get('HTTP_HOST'));
+        $finder->files()
+            ->in(__DIR__ . '/../../public/files/' . $config['path'])
+            ->name('*.mp3')
+            ->sortByName();
 
-        $feed = new \Castanet_Feed($title, $link, 'Een boek');
+        $feed = new \Castanet_Feed($config['title'], $config['link'], $config['description']);
         $feed->setImage($baseUrl . '/cover.jpg', 1440, 960);
 
         foreach ($finder as $file) {
@@ -36,38 +42,19 @@ class FeedController
             $info = $getID3->analyze($file->getRealPath());
 
             $url = $baseUrl . "/" . $file->getRelativePathname();
-//            dd($info);
 
-            $item->setTitle($info['id3v1']['title'] ? $info['id3v1']['title'] : $info['filename']);
+            $item->setTitle($info['id3v1']['title'] ?: $info['filename']);
             $item->setLink($url);
             $item->setMediaUrl($url);
             $item->setMediaMimeType('audio/mpeg');
             $item->setMediaSize($info['filesize']);
 
             $feed->addItem($item);
-            // dumps the absolute path
-//            dump($file->getRealPath());
-
-            // dumps the relative path to the file, omitting the filename
-//            dump($file->getRelativePath());
-
-            // dumps the relative path to the file
-//            dump($file->getRelativePathname());
         }
 
-        // this looks exactly the same
-//        return new Response((string) $feed);
-
-//        dd((string) $feed);
-
-
         $response = new Response((string) $feed);
-
-        $response->headers->set('Content-Type', 'application/rss+xml ');
+        $response->headers->set('Content-Type', 'application/xml ');
 
         return $response;
-
-        return new Response("<html><body>foo $slug</body></html>");
-
     }
 }
