@@ -25,6 +25,13 @@ class FeedController
             'description' => "This is a short description of the entire works. This is a short description of the entire works. This is a short description of the entire works. ",
         ];
 
+        $config = [
+            'path' => 'kkc-01',
+            'title' => "The Name of the wind",
+            'link' => "https://phpnews.io",
+            'description' => "This is a short description of the entire works. This is a short description of the entire works. This is a short description of the entire works. ",
+        ];
+
         $baseUrl = 'https://' . $request->server->get('HTTP_HOST') . '/files/' . $config['path'];
 
         $finder->files()
