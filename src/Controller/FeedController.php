@@ -2,14 +2,28 @@
 
 namespace App\Controller;
 
+use App\Config\Configuration;
 use getID3;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Tightenco\Collect\Support\Collection;
 
 class FeedController
 {
+
+    /** @var Collection */
+    private $config;
+
+    private $modifiedAt;
+
+    public function __construct(Configuration $config)
+    {
+        $this->config = new Collection($config->get());
+        $this->modifiedAt = $config->modifiedAt();
+    }
+
     /**
      * @Route("/feed/{slug}")
      */
@@ -18,28 +32,17 @@ class FeedController
         $finder = new Finder();
         $getID3 = new getID3;
 
-        $config = [
-            'path' => 'good-omens',
-            'title' => "Good Omens",
-            'link' => "https://phpnews.io",
-            'description' => "This is a short description of the entire works. This is a short description of the entire works. This is a short description of the entire works. ",
-        ];
+        $current = $this->config[$slug];
 
-        $config = [
-            'path' => 'kkc-01',
-            'title' => "The Name of the wind",
-            'link' => "https://phpnews.io",
-            'description' => "This is a short description of the entire works. This is a short description of the entire works. This is a short description of the entire works. ",
-        ];
 
-        $baseUrl = 'https://' . $request->server->get('HTTP_HOST') . '/files/' . $config['path'];
+        $baseUrl = 'https://' . $request->server->get('HTTP_HOST') . '/files/' . $current['path'];
 
         $finder->files()
-            ->in(__DIR__ . '/../../public/files/' . $config['path'])
+            ->in(__DIR__ . '/../../public/files/' . $current['path'])
             ->name('*.mp3')
             ->sortByName();
 
-        $feed = new \Castanet_Feed($config['title'], $config['link'], $config['description']);
+        $feed = new \Castanet_Feed($current['title'], '', '');
         $feed->setImage($baseUrl . '/cover.jpg', 1440, 960);
 
         foreach ($finder as $file) {
@@ -57,6 +60,7 @@ class FeedController
             $item->setMediaSize($info['filesize']);
 
             $feed->addItem($item);
+            dump($item);
         }
 
         $response = new Response((string) $feed);

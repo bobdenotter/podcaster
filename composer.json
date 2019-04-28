@@ -14,7 +14,8 @@
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
         "symfony/web-server-bundle": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "tightenco/collect": "^5.8"
     },
     "config": {
         "preferred-install": {

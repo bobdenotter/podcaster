@@ -14,14 +14,8 @@
     "doctrine/collections": {
         "version": "v1.5.0"
     },
-    "doctrine/common": {
-        "version": "v2.10.0"
-    },
     "doctrine/event-manager": {
         "version": "v1.0.0"
-    },
-    "doctrine/inflector": {
-        "version": "v1.3.0"
     },
     "doctrine/lexer": {
         "version": "v1.0.1"
@@ -217,6 +211,9 @@
     },
     "symfony/yaml": {
         "version": "v4.2.1"
+    },
+    "tightenco/collect": {
+        "version": "v5.8.14"
     },
     "twig/twig": {
         "version": "v2.6.0"
